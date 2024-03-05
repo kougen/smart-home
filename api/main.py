@@ -1,8 +1,7 @@
-from fastapi_versioning import VersionedFastAPI
 import uvicorn
 from fastapi import FastAPI
 from lib import get_versions
-
+import sys
 import routers.root_router_v1 as root_router_v1
 
 description = """
@@ -35,20 +34,13 @@ app = FastAPI(
     servers=get_versions(),
 )
 
-app.include_router(root_router_v1.root)
-
-app = VersionedFastAPI(
-    app,
-    enable_latest=True,
-    version_format='{major}',
-    prefix_format='/api/v{major}',
-)
-
-# app.openapi()["servers"] = get_versions()
-
-print(app.openapi())
-
+app.include_router(root_router_v1.root, prefix="/api")
+app.include_router(root_router_v1.root, prefix="/api/v1")
+app.include_router(root_router_v1.root, prefix="/api/latest")
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=80)
+    port = 80
+    if sys.argv[1] == "port":
+        port = int(sys.argv[2])
+    uvicorn.run(app, host="0.0.0.0", port=port)

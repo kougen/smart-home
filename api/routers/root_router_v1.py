@@ -1,6 +1,4 @@
-
 from fastapi import APIRouter
-from fastapi_versioning import version, versioned_api_route
 
 
 tags_metadata = [
@@ -24,25 +22,21 @@ tags_metadata = [
 
 root = APIRouter(
     tags=["Root"],
-    route_class=versioned_api_route(1)
 )
 
 lights_router = APIRouter(
     tags=["Lights"],
     prefix="/lights",
-    route_class=versioned_api_route(1)
 )
 
 temperature_router = APIRouter(
     tags=["Temperature"],
     prefix="/temperature",
-    route_class=versioned_api_route(1)
 )
 
 devices_router = APIRouter(
     tags=["Custom Devices"],
     prefix="/devices",
-    route_class=versioned_api_route(1)
 )
 
 
