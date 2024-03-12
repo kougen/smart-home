@@ -1,8 +1,7 @@
-import uvicorn
-from fastapi import FastAPI
-from lib import get_versions
+from lib import start_multiple_versions
 import sys
-import routers.root_router_v1 as root_router_v1
+import uvicorn
+from routers.v1.base import root as root_router_v1
 
 description = """
 
@@ -26,21 +25,5 @@ tags_metadata = [
 ]
 
 
-app = FastAPI(
-    title="Smart Home API",
-    description=description,
-    version="0.1.0",
-    openapi_tags=tags_metadata,
-    servers=get_versions(),
-)
-
-app.include_router(root_router_v1.root, prefix="/api")
-app.include_router(root_router_v1.root, prefix="/api/v1")
-app.include_router(root_router_v1.root, prefix="/api/latest")
-
-
 if __name__ == "__main__":
-    port = 80
-    if sys.argv[1] == "port":
-        port = int(sys.argv[2])
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    start_multiple_versions()
